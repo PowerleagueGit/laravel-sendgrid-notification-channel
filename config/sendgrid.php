@@ -29,11 +29,11 @@ return [
     | Test Recipient
     |--------------------------------------------------------------------------
     |
-    | When live_mode is false (default), ALL emails will be redirected to
-    | this email address instead of the actual recipients.
+    | When live_mode is false (default), emails will be redirected to this
+    | email address instead of the actual recipients.
     |
-    | You MUST set SENDGRID_TEST_RECIPIENT when not in live mode, otherwise
-    | an exception will be thrown to prevent silent failures.
+    | If no test recipient is configured and live_mode is false, emails will
+    | be silently dropped (not sent) and a debug log entry will be created.
     |
     */
     'test_recipient' => env('SENDGRID_TEST_RECIPIENT'),

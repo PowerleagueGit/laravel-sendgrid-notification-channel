@@ -4,6 +4,7 @@ namespace NotificationChannels\SendGrid;
 
 use SendGrid;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\SendGrid\Exceptions\CouldNotSendNotification;
 
@@ -73,10 +74,12 @@ class SendGridChannel
         // Safety check: redirect to test recipient unless explicitly in live mode
         if (! $this->liveMode) {
             if (empty($this->testRecipient)) {
-                throw new Exception(
-                    'SendGrid is not in live mode and no test recipient is configured. ' .
-                    'Set SENDGRID_TEST_RECIPIENT or enable SENDGRID_LIVE_MODE=true for production.'
-                );
+                // No test recipient configured - silently drop the email
+                Log::debug('SendGrid: Email dropped (not in live mode and no test recipient configured)', [
+                    'notification' => get_class($notification),
+                    'original_recipients' => array_map(fn($to) => $to->getEmail(), $message->tos),
+                ]);
+                return null;
             }
             $message->tos = [];
             $message->to($this->testRecipient, 'Test Recipient');

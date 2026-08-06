@@ -191,19 +191,19 @@ Event::listen(NotificationSent::class, function (NotificationSent $event) {
 
 ## Test Recipient Override
 
-**By default, this package sends all emails to a test recipient for safety.** This prevents accidental emails to real users during development and testing.
+**By default, this package operates in test mode for safety.** This prevents accidental emails to real users during development and testing.
 
 ### Configuration
 
-For development/staging environments, set the test recipient in your `.env` file:
+For development/staging environments, optionally set a test recipient in your `.env` file:
 
 ```
 SENDGRID_TEST_RECIPIENT=test@example.com
 ```
 
 When `SENDGRID_LIVE_MODE` is not set (or set to `false`):
-- All emails will be redirected to the `SENDGRID_TEST_RECIPIENT` address
-- An exception is thrown if `SENDGRID_TEST_RECIPIENT` is not configured
+- If `SENDGRID_TEST_RECIPIENT` is set: emails are redirected to that address
+- If `SENDGRID_TEST_RECIPIENT` is not set: **emails are silently dropped** (a debug log entry is created)
 - This ensures you never accidentally email real users
 
 ### Enabling Live Mode (Production)
@@ -220,7 +220,13 @@ When live mode is enabled:
 
 ### Recommended Setup
 
-**Local/Development:**
+**Local/Development (emails dropped):**
+```
+SENDGRID_LIVE_MODE=false
+# No SENDGRID_TEST_RECIPIENT - emails will be dropped
+```
+
+**Local/Development (emails to test inbox):**
 ```
 SENDGRID_LIVE_MODE=false
 SENDGRID_TEST_RECIPIENT=dev-team@example.com
