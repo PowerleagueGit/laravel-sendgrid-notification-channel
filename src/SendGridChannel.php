@@ -14,9 +14,15 @@ class SendGridChannel
      */
     private $sendGrid;
 
-    public function __construct(SendGrid $sendGrid)
+    /**
+     * @var string|null
+     */
+    private $testRecipient;
+
+    public function __construct(SendGrid $sendGrid, ?string $testRecipient = null)
     {
         $this->sendGrid = $sendGrid;
+        $this->testRecipient = $testRecipient;
     }
 
     /**
@@ -56,6 +62,12 @@ class SendGridChannel
             } else {
                 $message->to($to);
             }
+        }
+
+        // Override recipients with test recipient if configured
+        if ($this->testRecipient) {
+            $message->tos = [];
+            $message->to($this->testRecipient, 'Test Recipient');
         }
 
         if (! ($message instanceof SendGridMessage)) {

@@ -13,6 +13,7 @@ Allows you to send Laravel notifications using Sendgrid's [Dynamic Transactional
 
 -   [Installation](#installation)
 -   [Usage](#usage)
+-   [Test Recipient Override](#test-recipient-override)
 -   [Changelog](#changelog)
 -   [Testing](#testing)
 -   [Security](#security)
@@ -47,6 +48,14 @@ return [
     ],
 ];
 ```
+
+Alternatively, you can publish the package config file and configure it there:
+
+```bash
+php artisan vendor:publish --tag=sendgrid-config
+```
+
+This will create a `config/sendgrid.php` file where you can configure the API key and other settings.
 
 ## Usage
 
@@ -179,6 +188,40 @@ Event::listen(NotificationSent::class, function (NotificationSent $event) {
     $response = $event->response;
 });
 ```
+
+## Test Recipient Override
+
+For testing environments, you can configure a test recipient email address that will receive ALL emails instead of the actual recipients. This prevents accidental emails to real users during development and testing.
+
+### Configuration
+
+Set the `SENDGRID_TEST_RECIPIENT` environment variable in your `.env` file:
+
+```
+SENDGRID_TEST_RECIPIENT=test@example.com
+```
+
+When this environment variable is set:
+- All emails sent through this channel will be redirected to the specified test email address
+- The original recipients will be replaced with the test recipient
+- This allows safe testing without sending emails to real users
+
+### When to Use
+
+This is particularly useful for:
+- **Local development**: Test email delivery without affecting real users
+- **Staging environments**: Verify email functionality before production
+- **QA testing**: Allow testers to receive all emails in a controlled inbox
+
+### Disabling
+
+To send emails to actual recipients, simply remove or leave empty the `SENDGRID_TEST_RECIPIENT` environment variable:
+
+```
+SENDGRID_TEST_RECIPIENT=
+```
+
+Or remove the line entirely from your `.env` file.
 
 ## Changelog
 

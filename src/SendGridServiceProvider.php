@@ -12,12 +12,28 @@ class SendGridServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../config/sendgrid.php' => config_path('sendgrid.php'),
+        ], 'sendgrid-config');
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/sendgrid.php',
+            'sendgrid'
+        );
+
         $this->app->when(SendGridChannel::class)
             ->needs(SendGrid::class)
             ->give(function () {
                 return new SendGrid(
-                    $this->app['config']['services.sendgrid.api_key']
+                    $this->app['config']['sendgrid.api_key']
+                        ?? $this->app['config']['services.sendgrid.api_key']
                 );
+            });
+
+        $this->app->when(SendGridChannel::class)
+            ->needs('$testRecipient')
+            ->give(function () {
+                return $this->app['config']['sendgrid.test_recipient'];
             });
     }
 }
