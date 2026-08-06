@@ -191,37 +191,51 @@ Event::listen(NotificationSent::class, function (NotificationSent $event) {
 
 ## Test Recipient Override
 
-For testing environments, you can configure a test recipient email address that will receive ALL emails instead of the actual recipients. This prevents accidental emails to real users during development and testing.
+**By default, this package sends all emails to a test recipient for safety.** This prevents accidental emails to real users during development and testing.
 
 ### Configuration
 
-Set the `SENDGRID_TEST_RECIPIENT` environment variable in your `.env` file:
+For development/staging environments, set the test recipient in your `.env` file:
 
 ```
 SENDGRID_TEST_RECIPIENT=test@example.com
 ```
 
-When this environment variable is set:
-- All emails sent through this channel will be redirected to the specified test email address
-- The original recipients will be replaced with the test recipient
-- This allows safe testing without sending emails to real users
+When `SENDGRID_LIVE_MODE` is not set (or set to `false`):
+- All emails will be redirected to the `SENDGRID_TEST_RECIPIENT` address
+- An exception is thrown if `SENDGRID_TEST_RECIPIENT` is not configured
+- This ensures you never accidentally email real users
 
-### When to Use
+### Enabling Live Mode (Production)
 
-This is particularly useful for:
-- **Local development**: Test email delivery without affecting real users
-- **Staging environments**: Verify email functionality before production
-- **QA testing**: Allow testers to receive all emails in a controlled inbox
-
-### Disabling
-
-To send emails to actual recipients, simply remove or leave empty the `SENDGRID_TEST_RECIPIENT` environment variable:
+To send emails to actual recipients in production, explicitly enable live mode:
 
 ```
-SENDGRID_TEST_RECIPIENT=
+SENDGRID_LIVE_MODE=true
 ```
 
-Or remove the line entirely from your `.env` file.
+When live mode is enabled:
+- Emails are sent to the actual recipients
+- The `SENDGRID_TEST_RECIPIENT` setting is ignored
+
+### Recommended Setup
+
+**Local/Development:**
+```
+SENDGRID_LIVE_MODE=false
+SENDGRID_TEST_RECIPIENT=dev-team@example.com
+```
+
+**Staging:**
+```
+SENDGRID_LIVE_MODE=false
+SENDGRID_TEST_RECIPIENT=qa-team@example.com
+```
+
+**Production:**
+```
+SENDGRID_LIVE_MODE=true
+```
 
 ## Changelog
 

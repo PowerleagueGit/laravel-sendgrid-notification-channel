@@ -19,10 +19,16 @@ class SendGridChannel
      */
     private $testRecipient;
 
-    public function __construct(SendGrid $sendGrid, ?string $testRecipient = null)
+    /**
+     * @var bool
+     */
+    private $liveMode;
+
+    public function __construct(SendGrid $sendGrid, ?string $testRecipient = null, bool $liveMode = false)
     {
         $this->sendGrid = $sendGrid;
         $this->testRecipient = $testRecipient;
+        $this->liveMode = $liveMode;
     }
 
     /**
@@ -64,8 +70,14 @@ class SendGridChannel
             }
         }
 
-        // Override recipients with test recipient if configured
-        if ($this->testRecipient) {
+        // Safety check: redirect to test recipient unless explicitly in live mode
+        if (! $this->liveMode) {
+            if (empty($this->testRecipient)) {
+                throw new Exception(
+                    'SendGrid is not in live mode and no test recipient is configured. ' .
+                    'Set SENDGRID_TEST_RECIPIENT or enable SENDGRID_LIVE_MODE=true for production.'
+                );
+            }
             $message->tos = [];
             $message->to($this->testRecipient, 'Test Recipient');
         }

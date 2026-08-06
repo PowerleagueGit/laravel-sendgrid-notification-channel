@@ -35,5 +35,11 @@ class SendGridServiceProvider extends ServiceProvider
             ->give(function () {
                 return $this->app['config']['sendgrid.test_recipient'];
             });
+
+        $this->app->when(SendGridChannel::class)
+            ->needs('$liveMode')
+            ->give(function () {
+                return (bool) $this->app['config']['sendgrid.live_mode'];
+            });
     }
 }

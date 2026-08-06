@@ -13,18 +13,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Test Recipient Override
+    | Live Mode
     |--------------------------------------------------------------------------
     |
-    | When set, ALL emails sent through this channel will be redirected to
-    | this email address instead of the actual recipients. This is useful
-    | for testing environments where you want to prevent emails from being
-    | sent to real users.
+    | By default, emails are sent to the test_recipient address for safety.
+    | Set SENDGRID_LIVE_MODE=true to send emails to actual recipients.
     |
-    | Set the SENDGRID_TEST_RECIPIENT environment variable to enable this
-    | feature. Leave it empty or unset to send to actual recipients.
+    | This prevents accidental emails to real users in development/staging.
+    |
+    */
+    'live_mode' => env('SENDGRID_LIVE_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Test Recipient
+    |--------------------------------------------------------------------------
+    |
+    | When live_mode is false (default), ALL emails will be redirected to
+    | this email address instead of the actual recipients.
+    |
+    | You MUST set SENDGRID_TEST_RECIPIENT when not in live mode, otherwise
+    | an exception will be thrown to prevent silent failures.
     |
     */
     'test_recipient' => env('SENDGRID_TEST_RECIPIENT'),
 ];
-
