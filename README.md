@@ -193,6 +193,14 @@ Event::listen(NotificationSent::class, function (NotificationSent $event) {
 
 **By default, this package operates in test mode for safety.** This prevents accidental emails to real users during development and testing.
 
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SENDGRID_API_KEY` | Your SendGrid API key | _(required)_ |
+| `SENDGRID_LIVE_MODE` | Set to `true` to send emails to real recipients | `false` |
+| `SENDGRID_TEST_RECIPIENT` | Email address to receive all test emails | _(optional)_ |
+
 ### Configuration
 
 For development/staging environments, optionally set a test recipient in your `.env` file:
