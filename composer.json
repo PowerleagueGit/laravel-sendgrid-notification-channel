@@ -1,5 +1,5 @@
 {
-    "name": "powerleaguegit/laravel-sendgrid-notification-channel",
+    "name": "swiftmade/laravel-sendgrid-notification-channel",
     "description": "Laravel Notification Channel for Sengrid.com",
     "homepage": "https://github.com/swiftmade/laravel-sendgrid-notification-channel",
     "license": "MIT",
