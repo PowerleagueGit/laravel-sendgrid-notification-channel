@@ -1,7 +1,7 @@
 {
     "name": "swiftmade/laravel-sendgrid-notification-channel",
-    "description": "Laravel Notification Channel for Sengrid.com",
-    "homepage": "https://github.com/swiftmade/laravel-sendgrid-notification-channel",
+    "description": "Laravel Notification Channel for SendGrid (PowerleagueGit fork with test mode)",
+    "homepage": "https://github.com/PowerleagueGit/laravel-sendgrid-notification-channel",
     "license": "MIT",
     "authors": [
         {
@@ -9,6 +9,10 @@
             "email": "hello@swiftmade.co",
             "homepage": "https://swiftmade.co",
             "role": "Developer"
+        },
+        {
+            "name": "PowerleagueGit",
+            "role": "Fork maintainer"
         }
     ],
     "require": {
@@ -47,6 +51,7 @@
         }
     },
     "extra": {
+        "fork": "powerleaguegit",
         "laravel": {
             "providers": [
                 "NotificationChannels\\SendGrid\\SendGridServiceProvider"
