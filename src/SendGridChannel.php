@@ -71,6 +71,11 @@ class SendGridChannel
             }
         }
 
+        // .test is reserved for load tests: SendGrid validates the send without delivering or charging for it.
+        if ($this->allRecipientsOnTestDomains($message)) {
+            $message->enableSandboxMode();
+        }
+
         // Safety check: redirect to test recipient unless explicitly in live mode
         if (! $this->liveMode) {
             if (empty($this->testRecipient)) {
@@ -98,5 +103,20 @@ class SendGridChannel
         }
 
         return $response;
+    }
+
+    private function allRecipientsOnTestDomains(SendGridMessage $message): bool
+    {
+        if (empty($message->tos)) {
+            return false;
+        }
+
+        foreach ($message->tos as $to) {
+            if (substr(strtolower((string) $to->getEmail()), -5) !== '.test') {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

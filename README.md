@@ -226,6 +226,10 @@ When live mode is enabled:
 - Emails are sent to the actual recipients
 - The `SENDGRID_TEST_RECIPIENT` setting is ignored
 
+### Reserved `.test` Addresses (Sandbox Mode)
+
+When every recipient is on a `.test` domain (for example `loadtest0001@bookingznow.test`), the email is sent in [SendGrid sandbox mode](https://docs.sendgrid.com/for-developers/sending-email/sandbox-mode), in any mode. SendGrid validates the request but never delivers it and uses no credits. `.test` is reserved, so no real inbox can be affected. If any recipient is on another domain, the email is sent as usual.
+
 ### Recommended Setup
 
 **Local/Development (emails dropped):**

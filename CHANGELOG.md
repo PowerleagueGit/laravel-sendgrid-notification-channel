@@ -2,6 +2,10 @@
 
 All notable changes will be documented in this file
 
+## Unreleased
+
+Emails whose recipients are all on reserved `.test` domains are sent in SendGrid sandbox mode, so load tests use no credits.
+
 ## 2.10.0 - 2026-03-18
 
 Added support for Laravel 13.
